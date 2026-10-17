@@ -1,7 +1,7 @@
 // Talking to the Python backend (server.py).
 // The session token from logging in is kept in localStorage and sent on every request.
 
-export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+export const API_URL = import.meta.env.VITE_API_URL ?? "https://finapp-production-1e60.up.railway.app";
 const TOKEN_KEY = "finapp_token";
 
 export type BankLink = { nessie_customer_id: string; linked_at: string };
