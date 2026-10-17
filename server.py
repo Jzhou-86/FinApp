@@ -55,12 +55,19 @@ import nessie
 app = FastAPI(title="finapp backend")
 
 # The Vite dev server (frontend) runs on port 8443.
+# Allow the deployed frontend and local development.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8443", "http://127.0.0.1:8443"],
-    allow_methods=["GET", "POST", "DELETE"],
+    allow_origins=[
+        "https://finapp-poo.up.railway.app",
+        "http://localhost:8443",
+        "http://127.0.0.1:8443",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(auth.router)
 app.include_router(bank.router)
@@ -185,8 +192,14 @@ def dashboard(period: str = "this_month", user: dict = Depends(bank.require_bank
 
 
 if __name__ == "__main__":
+    import os
     import uvicorn
 
     if auth.DEV_MODE:
         print("Demo login shortcut is ON (set FINAPP_DEV=0 to turn it off).")
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+    )
